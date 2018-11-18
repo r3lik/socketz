@@ -5,7 +5,7 @@ A simple TCP server written in Python
 
 Requirements
 --------------
-Python 3
+* Python 3
 
 Flags
 --------------
