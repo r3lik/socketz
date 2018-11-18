@@ -33,8 +33,10 @@ def threaded_client(client_list, conn, addr):
                 print("sent reply to {0}".format(client_id))
 
             elif data.decode('ASCII').strip() == "WHO":
-                reply = "{0}\n".format(client_list)
-                conn.sendall(reply.encode('ASCII'))
+                reply1 = "{}\n".format(client_list)
+                reply2 = str(len(client_list))
+                conn.sendall(reply1.encode('ASCII'))
+                conn.sendall(reply2.encode('ASCII'))
                 print("sent reply to {0}".format(client_id))
 
             elif data.decode('ASCII').strip() == "WHERE":
