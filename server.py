@@ -62,7 +62,7 @@ def server(host, port, client_list):
     s.listen(5)
     while True:
         conn, addr = s.accept()
-        print('connected to: '+addr[0]+':'+str(addr[1]))
+        print('connection from: '+addr[0]+':'+str(addr[1]))
         t = threading.Thread(target=threaded_client, args=(client_list, conn, addr))
         t.daemon = True
         t.start()
