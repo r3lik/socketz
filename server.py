@@ -3,6 +3,8 @@ import socket
 import threading
 import uuid
 
+UUID=str(uuid.uuid4())
+
 def parse_args():
     """ CLI  """
     parser = argparse.ArgumentParser()
@@ -14,7 +16,7 @@ def parse_args():
 def threaded_client(client_list, conn, addr):
     """ Threads single client connections"""
     client_id = "{0}:{1}".format(addr[0],addr[1])
-    UUID=str(uuid.uuid4())
+
     try:
         client_list.add(client_id)
 
