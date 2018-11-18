@@ -7,7 +7,7 @@ def parse_args():
     """ CLI  """
     parser = argparse.ArgumentParser()
     parser.add_argument('-H','--host', type=str, default='127.0.0.1')
-    parser.add_argument('-p','--port', type=str, default=5151)
+    parser.add_argument('-p','--port', type=int, default=5151)
     result = parser.parse_args()
     return result
 
