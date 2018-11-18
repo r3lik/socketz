@@ -43,6 +43,10 @@ def threaded_client(client_list, conn, addr):
             elif data.decode('ASCII').strip() == "QUIT":
                 break
 
+            else:
+                reply = "invalid command:\n use 'WHY', 'WHO', 'WHERE', 'QUIT'\n"
+                conn.sendall(reply.encode('ASCII'))
+
             #print(data.encode('ASCII'))
 
         conn.shutdown(socket.SHUT_RDWR)
