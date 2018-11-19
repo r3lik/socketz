@@ -1,11 +1,11 @@
 Socketz
 ============
 
-A simple, load balanced TCP server written in Python
+A simple TCP server written in Python. It uses HAProxy for Layer 4 load balancing.
 
 Requirements
 --------------
-* Python 3
+* Python 3.0+
 * Docker
 * Docker Compose
 
@@ -16,14 +16,14 @@ Usage
 
 Flags
 --------------
-* `-H, --host` default `127.0.0.1`
+* `-H, --host` default `0.0.0.0`
 * `-p, --port` default `5151`
 
 Debugging
 -------------
-* `docker-compose config` #prints out config with var substitution
-* `docker-compose ps` #lists running containers launched
-* `docker attach <name>` #attaches to tty 
+* `docker-compose config` prints out config with var substitution
+* `docker-compose ps` lists running containers launched
+* `docker attach <name>` attaches to tty 
 
 Sample ouput: server 
 ----------------
@@ -54,3 +54,7 @@ WHERE
 69bbfcac-0fc2-48d4-ba23-4eb100dc925d
 ```
 
+To do
+------
+* Implement `heartbeat` or `keepalived` for automatic failover/fault tolerance  
+* Implement state handling across the cluster with `etcd` 
