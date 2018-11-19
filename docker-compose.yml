@@ -13,18 +13,24 @@ networks:
 services:
   server01:
     image: ${SERVER_IMAGE}
+    stdin_open: true
+    tty: true
     networks:
       app_network:
         ipv4_address: ${SERVER1_IP}
 
   server02:
     image: ${SERVER_IMAGE}
+    stdin_open: true
+    tty: true
     networks:
       app_network:
         ipv4_address: ${SERVER2_IP}
   
   server03:
     image: ${SERVER_IMAGE}
+    stdin_open: true
+    tty: true
     networks:
       app_network:
         ipv4_address: ${SERVER3_IP}

@@ -1,7 +1,7 @@
 Socketz
 ============
 
-A simple TCP server written in Python
+A simple, load balanced TCP server written in Python
 
 Requirements
 --------------
@@ -12,17 +12,24 @@ Requirements
 Usage 
 ------------
 * `docker-compose up -d`
+* `telnet localhost 4141`
 
 Flags
 --------------
 * `-H, --host` default `127.0.0.1`
 * `-p, --port` default `5151`
 
+Debugging
+-------------
+* `docker-compose config` prints out config with var substitution
+* `docker-compose ps` lists running containers launched
+* `docker attach <name>` attaches to tty 
+
 Sample ouput: server 
 ----------------
 
 ```
-python3 server.py -p 6000                                                                           [13:32:24]
+python3 server.py                                                                           [13:32:24]
 Starting server...
 connection from: 127.0.0.1:61623
 sent reply to 127.0.0.1:61623
