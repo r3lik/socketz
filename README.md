@@ -11,8 +11,8 @@ Requirements
 
 Usage 
 ------------
-* `docker-compose up -d`
-* `telnet localhost 4141`
+* `docker-compose up -d` to provision network, download images and launch containers
+* `telnet localhost 4141` to connect to server (roundrobin)
 
 Flags
 --------------
@@ -21,9 +21,9 @@ Flags
 
 Debugging
 -------------
-* `docker-compose config` prints out config with var substitution
-* `docker-compose ps` lists running containers launched
-* `docker attach <name>` attaches to tty 
+* `docker-compose config` #prints out config with var substitution
+* `docker-compose ps` #lists running containers launched
+* `docker attach <name>` #attaches to tty 
 
 Sample ouput: server 
 ----------------
