@@ -56,5 +56,5 @@ WHERE
 
 To do
 ------
-* Implement `heartbeat` or `keepalived` for automatic failover/fault tolerance  
+* Implement `heartbeat`, `keepalived` or `ucarp` for automatic failover/fault tolerance  
 * Implement state handling across the cluster with `etcd` 
