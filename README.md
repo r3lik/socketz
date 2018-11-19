@@ -54,7 +54,7 @@ WHERE
 69bbfcac-0fc2-48d4-ba23-4eb100dc925d
 ```
 
-To do
+To-do
 ------
 * Implement `heartbeat`, `keepalived` or `ucarp` for automatic failover/fault tolerance  
 * Implement state handling across the cluster with `etcd` 
