@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 Created by Mike Czarny on 11/17/2018 as a code challenge for blockchain.com
 github.com/r3lik

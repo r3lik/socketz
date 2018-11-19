@@ -20,6 +20,9 @@ services:
     tty: true
     ports:
       - "127.0.0.1:5151:${SERVER_PORT}"
+    command:
+      - "-p 6000"
+      #- "-H 172.60.0.10"
 
   server2:
     image: ${SERVER_IMAGE}
@@ -30,6 +33,9 @@ services:
     tty: true
     ports:
       - "127.0.0.1:5152:${SERVER_PORT}"
+    command:
+      - "-p 6000"
+     # - "-H 0.0.0.0"
   
   server3:
     image: ${SERVER_IMAGE}
@@ -40,6 +46,9 @@ services:
     tty: true
     ports:
       - "127.0.0.1:5153:${SERVER_PORT}"
+    command:
+      - "-p 6000"
+     # - "-H 0.0.0.0"
   
   load_balancer:
     container_name: haproxy

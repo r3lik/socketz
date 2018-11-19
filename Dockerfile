@@ -2,10 +2,10 @@ FROM python:3
 
 WORKDIR /usr/src/app
 
-#COPY requirements.txt ./
-#RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get update && \
+    apt-get install -y telnet net-tools vim 
 
 COPY server.py .
 EXPOSE 5151
 
-CMD [ "python", "./server.py" ]
+ENTRYPOINT [ "python", "./server.py" ]
