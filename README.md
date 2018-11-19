@@ -4,6 +4,8 @@ Socketz
 
 A simple TCP server written in Python. It uses HAProxy for Layer 4 load balancing and HA. 
 
+![screencap](https://github.com/r3lik/socketz/blob/master/socket.gif)
+
 Requirements
 --------------
 * Python 3.0+
