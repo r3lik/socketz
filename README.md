@@ -1,6 +1,7 @@
 Socketz 
 ============
 ![socket](https://github.com/r3lik/socketz/blob/master/socket.png)
+
 A simple TCP server written in Python. It uses HAProxy for Layer 4 load balancing and HA. 
 
 Requirements
