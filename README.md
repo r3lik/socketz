@@ -1,7 +1,7 @@
 Socketz
 ============
 
-A simple TCP server written in Python. It uses HAProxy for Layer 4 load balancing.
+A simple TCP server written in Python. It uses HAProxy for Layer 4 load balancing and HA. 
 
 Requirements
 --------------
@@ -13,6 +13,11 @@ Usage
 ------------
 * `docker-compose up -d` to provision network, download images and launch containers
 * `telnet localhost 4141` to connect to server (roundrobin)
+* `docker kill server01` to demonstrate that new requests roundrobin to healthy servers only
+
+HAProxy stats
+-------------
+* `http://localhost:9000/stats` admin:hodl  
 
 Flags
 --------------
@@ -29,7 +34,7 @@ Sample ouput: server
 ----------------
 
 ```
-python3 server.py                                                                           [13:32:24]
+python3 server.py 
 Starting server...
 connection from: 127.0.0.1:61623
 sent reply to 127.0.0.1:61623
@@ -54,7 +59,6 @@ WHERE
 69bbfcac-0fc2-48d4-ba23-4eb100dc925d
 ```
 
-To-do
-------
-* Implement `heartbeat`, `keepalived` or `ucarp` for automatic failover/fault tolerance. This could also by done with `quagga` or `bird` at the network level with anycast, where all backends announce the same IP, and the announcement (/32) drops when the server disappears.   
-* Implement state handling across the cluster with `etcd` 
+State replication 
+-----------------
+To achieve this, we can implement state persistence of connected clients across the cluster with `etcd`. To add fault tolerance, we would run multiple instances/containers of the k/v store behind `HAProxy`. The python `requests` library can be used to update/remove connected clients using the `etcd` api. This would replace the existing set that is unaware of another servers' state.  

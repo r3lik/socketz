@@ -12,6 +12,7 @@ networks:
 
 services:
   server01:
+    container_name: server01
     image: ${SERVER_IMAGE}
     stdin_open: true
     tty: true
@@ -20,6 +21,7 @@ services:
         ipv4_address: ${SERVER1_IP}
 
   server02:
+    container_name: server02
     image: ${SERVER_IMAGE}
     stdin_open: true
     tty: true
@@ -29,6 +31,7 @@ services:
   
   server03:
     image: ${SERVER_IMAGE}
+    container_name: server03
     stdin_open: true
     tty: true
     networks:
@@ -47,3 +50,4 @@ services:
         ipv4_address: ${HAPROXY_IP}
     ports:
       - "127.0.0.1:4141:${HAPROXY_PORT}"
+      - "127.0.0.1:9000:9000"
