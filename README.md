@@ -62,4 +62,4 @@ WHERE
 
 State replication 
 -----------------
-To achieve this, we can implement state persistence of connected clients across the cluster with `etcd`. To add fault tolerance, we would run multiple instances/containers of the k/v store behind `HAProxy`. The python `requests` library can be used to update/remove connected clients using the `etcd` api. This would replace the existing set that is unaware of another servers' state.  
+To achieve this, we can implement state persistence of connected clients across the cluster with `etcd`. To addfault tolerance, we would run multiple instances/containers of the k/v store behind `HAProxy`. The python `requests` library can be used to update/remove connected clients using the `etcd` api. This would replace the existing set that is unaware of another servers' state.  
