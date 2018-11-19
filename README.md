@@ -56,5 +56,5 @@ WHERE
 
 To-do
 ------
-* Implement `heartbeat`, `keepalived` or `ucarp` for automatic failover/fault tolerance  
+* Implement `heartbeat`, `keepalived` or `ucarp` for automatic failover/fault tolerance. This could also by done with `quagga` or `bird` at the network level with anycast, where all backends announce the same IP, and the announcement (/32) drops when the server disappears.   
 * Implement state handling across the cluster with `etcd` 
