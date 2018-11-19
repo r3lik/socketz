@@ -16,39 +16,18 @@ services:
     networks:
       app_network:
         ipv4_address: ${SERVER1_IP}
-    stdin_open: true
-    tty: true
-    ports:
-      - "127.0.0.1:5151:${SERVER_PORT}"
-    #command:
-      #- "-p 6000"
-      #- "-H 0.0.0.0"
 
   server02:
     image: ${SERVER_IMAGE}
     networks:
       app_network:
         ipv4_address: ${SERVER2_IP}
-    stdin_open: true
-    tty: true
-    ports:
-      - "127.0.0.1:5152:${SERVER_PORT}"
-    #command:
-     # - "-p 6000"
-     # - "-H 0.0.0.0"
   
   server03:
     image: ${SERVER_IMAGE}
     networks:
       app_network:
         ipv4_address: ${SERVER3_IP}
-    stdin_open: true
-    tty: true
-    ports:
-      - "127.0.0.1:5153:${SERVER_PORT}"
-    #command:
-     # - "-p 6000"
-     # - "-H 0.0.0.0"
   
   load_balancer:
     container_name: haproxy
@@ -57,12 +36,8 @@ services:
       - server02
       - server03
     image: ${HAPROXY_IMAGE} 
-    #environment:
-     # - BALANCE=leastconn
-     # - BALANCE=roundrobin
     networks:
       app_network:
-        # static IP for proxy
-        ipv4_address: 172.60.0.2
+        ipv4_address: ${HAPROXY_IP}
     ports:
-      - "127.0.0.1:6161:${HAPROXY_PORT}"
+      - "127.0.0.1:4141:${HAPROXY_PORT}"
