@@ -20,9 +20,9 @@ services:
     tty: true
     ports:
       - "127.0.0.1:5151:${SERVER_PORT}"
-    command:
-      - "-p 6000"
-      #- "-H 172.60.0.10"
+    #command:
+      #- "-p 6000"
+      #- "-H 0.0.0.0"
 
   server2:
     image: ${SERVER_IMAGE}

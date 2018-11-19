@@ -13,9 +13,8 @@ import uuid
 UUID=str(uuid.uuid4())
 
 def parse_args():
-    """ CLI  """
     parser = argparse.ArgumentParser()
-    parser.add_argument('-H','--host', type=str, default='127.0.0.1')
+    parser.add_argument('-H','--host', type=str, default='0.0.0.0')
     parser.add_argument('-p','--port', type=int, default=5151)
     result = parser.parse_args()
     return result
@@ -40,8 +39,8 @@ def threaded_client(client_list, conn, addr):
                 print("sent reply to {0}".format(client_id))
 
             elif data.decode('ASCII').strip() == "WHO":
-                reply1 = "{}\n".format(client_list)
-                reply2 = str(len(client_list))
+                reply1 = "client list: {0}\n".format(client_list)
+                reply2 = "connected clients: {0}\n".format(str(len(client_list)))
                 conn.sendall(reply1.encode('ASCII'))
                 conn.sendall(reply2.encode('ASCII'))
                 print("sent reply to {0}".format(client_id))
@@ -58,37 +57,34 @@ def threaded_client(client_list, conn, addr):
                 reply = "invalid command:\n use 'WHY', 'WHO', 'WHERE', 'QUIT'\n"
                 conn.sendall(reply.encode('ASCII'))
 
-            #print(data.encode('ASCII'))
-
         conn.shutdown(socket.SHUT_RDWR)
 
     except socket.error as err:
-        print("Socket disconnected...")
+        print("socket disconnected...")
 
     finally:
         client_list.remove(client_id)
         conn.close()
 
 def server(host, port, client_list):
-    print("Starting server...")
+    print("starting server...")
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) #setting sockopt so addresses are released after script is killed
     s.bind((host, port))
     s.listen(5)
     while True:
         conn, addr = s.accept()
         print('connection from: '+addr[0]+':'+str(addr[1]))
-        t = threading.Thread(target=threaded_client, args=(client_list, conn, addr))
-        t.daemon = True
+        t = threading.Thread(target=threaded_client, daemon = True, args=(client_list, conn, addr)) # daemon thread terminates when main program ends
         t.start()
 
 def main():
-    client_list = set() # client must be unique
+    client_list = set() # stores an array of currently connected clients. FOR DEBUGGING. removes client after d/c.
     args = parse_args()
     try:
         server(args.host, args.port, client_list)
     except KeyboardInterrupt:
-        print("Keyboard interrupt")
+        print("keyboard interrupt")
 
 if __name__ == '__main__':
     main()
