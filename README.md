@@ -90,3 +90,4 @@ clients
 5
 ```
 This shows that a key:value pair put on `etcd01` is made available to `etcd02` and `etcd03` via the `Raft` consensus algorithm.
+In the server code, I would add a function to increment/decrement the `clients` value based on connections/disconnections.
