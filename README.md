@@ -27,7 +27,7 @@ Commands
 * `WHO` outputs the total number of clients connected and their IP:port for debugging
   - with `etcd` this will output the total number of clients connected to all available servers
 * `WHERE` outputs the id of the server (unique identifier)
-* `WHY` outputs the string "42` ;]
+* `WHY` outputs the string "42" ;]
 * `QUIT` terminates session :wave:
 
 Flags
