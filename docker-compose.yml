@@ -52,47 +52,47 @@ services:
       - "127.0.0.1:4141:${HAPROXY_PORT}"
       - "127.0.0.1:9000:9000" 
 
-  etcd1:
-    image: quay.io/coreos/etcd
-    container_name: etcd1
+  etcd01:
+    image: quay.io/coreos/etcd:v3.3.10
+    container_name: etcd01
 #    ports:
 #        - 2379:2379
 #        - 2380:2380
 #        - 4001:4001
     command: >
-        etcd -name etcd1
+        etcd -name etcd01
         -advertise-client-urls http://${ETCD1_IP}:2379,http://${ETCD1_IP}:4001
         -listen-client-urls http://0.0.0.0:2379,http://0.0.0.0:4001
         -initial-advertise-peer-urls http://${ETCD1_IP}:2380
         -listen-peer-urls http://0.0.0.0:2380
         -initial-cluster-token etcd-cluster-1
-        -initial-cluster etcd1=http://${ETCD1_IP}:2380,etcd2=http://${ETCD2_IP}:2380,etcd3=http://${ETCD3_IP}:2380
+        -initial-cluster etcd01=http://${ETCD1_IP}:2380,etcd02=http://${ETCD2_IP}:2380,etcd03=http://${ETCD3_IP}:2380
         -initial-cluster-state new
     networks:
       app_network:
         ipv4_address: ${ETCD1_IP}
-  etcd2:
-    image: quay.io/coreos/etcd
-    container_name: etcd2
+  etcd02:
+    image: quay.io/coreos/etcd:v3.3.10
+    container_name: etcd02
 #    ports:
 #        - 2379:2379
 #        - 2380:2380
 #        - 4001:4001
     command: >
-        etcd -name etcd2
+        etcd -name etcd02
         -advertise-client-urls http://${ETCD2_IP}:2379,http://${ETCD2_IP}:4001
         -listen-client-urls http://0.0.0.0:2379,http://0.0.0.0:4001
         -initial-advertise-peer-urls http://${ETCD2_IP}:2380
         -listen-peer-urls http://0.0.0.0:2380
         -initial-cluster-token etcd-cluster-1
-        -initial-cluster etcd1=http://${ETCD1_IP}:2380,etcd2=http://${ETCD2_IP}:2380,etcd3=http://${ETCD3_IP}:2380
+        -initial-cluster etcd01=http://${ETCD1_IP}:2380,etcd02=http://${ETCD2_IP}:2380,etcd03=http://${ETCD3_IP}:2380
         -initial-cluster-state new
     networks:
       app_network:
         ipv4_address: ${ETCD2_IP}
-  etcd3:
-    image: quay.io/coreos/etcd
-    container_name: etcd3
+  etcd03:
+    image: quay.io/coreos/etcd:v3.3.10
+    container_name: etcd03
     ## since i am testing this cluster via localhost interface in ipython
     ## i am just exposing one of the nodes ports
     ports:
@@ -100,13 +100,13 @@ services:
         - 2380:2380
         - 4001:4001
     command: >
-        etcd -name etcd3
+        etcd -name etcd03
         -advertise-client-urls http://${ETCD3_IP}:2379,http://${ETCD3_IP}:4001
         -listen-client-urls http://0.0.0.0:2379,http://0.0.0.0:4001
         -initial-advertise-peer-urls http://${ETCD3_IP}:2380
         -listen-peer-urls http://0.0.0.0:2380
         -initial-cluster-token etcd-cluster-1
-        -initial-cluster etcd1=http://${ETCD1_IP}:2380,etcd2=http://${ETCD2_IP}:2380,etcd3=http://${ETCD3_IP}:2380
+        -initial-cluster etcd01=http://${ETCD1_IP}:2380,etcd02=http://${ETCD2_IP}:2380,etcd03=http://${ETCD3_IP}:2380
         -initial-cluster-state new
     networks:
       app_network:
