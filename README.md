@@ -17,6 +17,13 @@ Usage
 * `docker-compose up -d` to provision network, download images and launch containers
 * `telnet localhost 4141` to connect to server (roundrobin)
 * `docker kill server01` to demonstrate that new requests roundrobin to healthy servers only
+* `docker exec etcd01 /bin/sh -c "export ETCDCTL_API=3 && /usr/local/bin/etcdctl member list"` to list nodes in cluster
+* `docker exec etcd01 /bin/sh -c "export ETCDCTL_API=3 && /usr/local/bin/etcdctl put clients 5"` to demonstrate state replication among nodes
+```
+❯ docker exec etcd03 /bin/sh -c "export ETCDCTL_API=3 && /usr/local/bin/etcdctl get clients"
+clients
+5
+``` 
 
 HAProxy stats
 -------------
