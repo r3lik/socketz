@@ -11,6 +11,53 @@ networks:
         subnet: 172.60.0.0/24
 
 services:
+
+  haproxy01:
+    container_name: haproxy01
+    depends_on:
+      - server01
+      - server02
+      - server03
+    image: ${HAPROXY_IMAGE}
+    networks:
+      app_network:
+        ipv4_address: ${HAPROXY1_IP}
+        aliases:
+          - lb
+    ports:
+      - "127.0.0.1:4141:${HAPROXY_PORT}"
+      - "127.0.0.1:9000:9000"
+  haproxy02:
+    container_name: haproxy02
+    depends_on:
+      - server01
+      - server02
+      - server03
+    image: ${HAPROXY_IMAGE}
+    networks:
+      app_network:
+        ipv4_address: ${HAPROXY2_IP}
+        aliases:
+          - lb
+    #ports:
+    #  - "127.0.0.1:414:${HAPROXY_PORT}"
+    #  - "127.0.0.1:9000:9000"
+  haproxy03:
+    container_name: haproxy03
+    depends_on:
+      - server01
+      - server02
+      - server03
+    image: ${HAPROXY_IMAGE}
+    networks:
+      app_network:
+        ipv4_address: ${HAPROXY3_IP}
+        aliases:
+          - lb
+    #ports:
+    #  - "127.0.0.1:4141:${HAPROXY_PORT}"
+    #  - "127.0.0.1:9000:9000"
+
   server01:
     container_name: server01
     image: ${SERVER_IMAGE}
@@ -28,7 +75,7 @@ services:
     networks:
       app_network:
         ipv4_address: ${SERVER2_IP}
-  
+
   server03:
     image: ${SERVER_IMAGE}
     container_name: server03
@@ -37,28 +84,10 @@ services:
     networks:
       app_network:
         ipv4_address: ${SERVER3_IP}
-  
-  load_balancer:
-    container_name: haproxy
-    depends_on:
-      - server01
-      - server02
-      - server03
-    image: ${HAPROXY_IMAGE} 
-    networks:
-      app_network:
-        ipv4_address: ${HAPROXY_IP}
-    ports:
-      - "127.0.0.1:4141:${HAPROXY_PORT}"
-      - "127.0.0.1:9000:9000" 
 
   etcd01:
     image: quay.io/coreos/etcd:v3.3.10
     container_name: etcd01
-#    ports:
-#        - 2379:2379
-#        - 2380:2380
-#        - 4001:4001
     command: >
         etcd -name etcd01
         -advertise-client-urls http://${ETCD1_IP}:2379,http://${ETCD1_IP}:4001
@@ -74,10 +103,6 @@ services:
   etcd02:
     image: quay.io/coreos/etcd:v3.3.10
     container_name: etcd02
-#    ports:
-#        - 2379:2379
-#        - 2380:2380
-#        - 4001:4001
     command: >
         etcd -name etcd02
         -advertise-client-urls http://${ETCD2_IP}:2379,http://${ETCD2_IP}:4001
