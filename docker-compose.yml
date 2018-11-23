@@ -14,6 +14,7 @@ services:
 
   haproxy01:
     container_name: haproxy01
+    hostname: haproxy01
     depends_on:
       - server01
       - server02
@@ -23,12 +24,12 @@ services:
       app_network:
         ipv4_address: ${HAPROXY1_IP}
         aliases:
-          - lb
+          - frontend.socketz.gg
     ports:
-      - "127.0.0.1:4141:${HAPROXY_PORT}"
       - "127.0.0.1:9000:9000"
   haproxy02:
     container_name: haproxy02
+    hostname: haproxy02
     depends_on:
       - server01
       - server02
@@ -38,12 +39,10 @@ services:
       app_network:
         ipv4_address: ${HAPROXY2_IP}
         aliases:
-          - lb
-    #ports:
-    #  - "127.0.0.1:414:${HAPROXY_PORT}"
-    #  - "127.0.0.1:9000:9000"
+          - frontend.socketz.gg
   haproxy03:
     container_name: haproxy03
+    hostname: haproxy03
     depends_on:
       - server01
       - server02
@@ -53,32 +52,30 @@ services:
       app_network:
         ipv4_address: ${HAPROXY3_IP}
         aliases:
-          - lb
-    #ports:
-    #  - "127.0.0.1:4141:${HAPROXY_PORT}"
-    #  - "127.0.0.1:9000:9000"
+          - frontend.socketz.gg
 
   server01:
     container_name: server01
+    hostname: server01
     image: ${SERVER_IMAGE}
     stdin_open: true
     tty: true
     networks:
       app_network:
         ipv4_address: ${SERVER1_IP}
-
   server02:
     container_name: server02
+    hostname: server02
     image: ${SERVER_IMAGE}
     stdin_open: true
     tty: true
     networks:
       app_network:
         ipv4_address: ${SERVER2_IP}
-
   server03:
-    image: ${SERVER_IMAGE}
     container_name: server03
+    hostname: server03
+    image: ${SERVER_IMAGE}
     stdin_open: true
     tty: true
     networks:
@@ -86,8 +83,9 @@ services:
         ipv4_address: ${SERVER3_IP}
 
   etcd01:
-    image: quay.io/coreos/etcd:v3.3.10
     container_name: etcd01
+    hostname: etcd01
+    image: quay.io/coreos/etcd:v3.3.10
     command: >
         etcd -name etcd01
         -advertise-client-urls http://${ETCD1_IP}:2379,http://${ETCD1_IP}:4001
@@ -100,9 +98,12 @@ services:
     networks:
       app_network:
         ipv4_address: ${ETCD1_IP}
+        aliases:
+          - etcd-cluster.socketz.gg
   etcd02:
-    image: quay.io/coreos/etcd:v3.3.10
     container_name: etcd02
+    hostname: etcd02
+    image: quay.io/coreos/etcd:v3.3.10
     command: >
         etcd -name etcd02
         -advertise-client-urls http://${ETCD2_IP}:2379,http://${ETCD2_IP}:4001
@@ -115,15 +116,12 @@ services:
     networks:
       app_network:
         ipv4_address: ${ETCD2_IP}
+        aliases:
+          - etcd-cluster.socketz.gg
   etcd03:
-    image: quay.io/coreos/etcd:v3.3.10
     container_name: etcd03
-    ## since i am testing this cluster via localhost interface in ipython
-    ## i am just exposing one of the nodes ports
-    ports:
-        - 2379:2379
-        - 2380:2380
-        - 4001:4001
+    hostname: etcd03
+    image: quay.io/coreos/etcd:v3.3.10
     command: >
         etcd -name etcd03
         -advertise-client-urls http://${ETCD3_IP}:2379,http://${ETCD3_IP}:4001
@@ -136,3 +134,58 @@ services:
     networks:
       app_network:
         ipv4_address: ${ETCD3_IP}
+        aliases:
+          - etcd-cluster.socketz.gg
+
+  client01:
+    container_name: client01
+    hostname: client01
+    image: ${CLIENT_IMAGE}
+    stdin_open: true
+    tty: true
+    depends_on:
+      - server01
+      - server02
+      - server03
+    networks:
+      app_network:
+        ipv4_address: ${CLIENT1_IP}
+  client02:
+    container_name: client02
+    hostname: client02
+    image: ${CLIENT_IMAGE}
+    stdin_open: true
+    tty: true
+    depends_on:
+      - server01
+      - server02
+      - server03
+    networks:
+      app_network:
+        ipv4_address: ${CLIENT2_IP}
+  client03:
+    container_name: client03
+    hostname: client03
+    image: ${CLIENT_IMAGE}
+    stdin_open: true
+    tty: true
+    depends_on:
+      - server01
+      - server02
+      - server03
+    networks:
+      app_network:
+        ipv4_address: ${CLIENT3_IP}
+  client04:
+    container_name: client04
+    hostname: client04
+    image: ${CLIENT_IMAGE}
+    stdin_open: true
+    tty: true
+    depends_on:
+      - server01
+      - server02
+      - server03
+    networks:
+      app_network:
+        ipv4_address: ${CLIENT4_IP}

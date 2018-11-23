@@ -15,8 +15,9 @@ Requirements
 Usage
 ------------
 * `docker-compose up -d` to provision network, download images and launch containers
-* `telnet localhost 4141` to connect to server (roundrobin)
-* `docker kill server01` to demonstrate that new requests roundrobin to healthy servers only
+* `docker exec -it client01 /usr/bin/telnet frontend.socketz.gg 4141`... `client04` to mimic outside client connections to FQDN
+* `docker kill server01` to demonstrate that new requests roundrobin to healthy servers only via `HAProxy`
+* `docker kill etcd01` to demonstrate that `DNS` roundrobin will use working connections
 * `docker exec etcd01 /bin/sh -c "export ETCDCTL_API=3 && /usr/local/bin/etcdctl member list"` to list nodes in cluster
 
 
@@ -26,13 +27,12 @@ HAProxy stats
 
 Commands
 -------------
-* `WHO` outputs the total number of clients connected and their IP:port for debugging
-  - with `etcd` this will output the total number of clients connected to all available servers
+* `WHO` shows clients connected to all available servers and locally connected clients (via HAProxy)
 * `WHERE` outputs the id of the server (unique identifier)
 * `WHY` outputs the string "42" ;]
 * `QUIT` terminates session :wave:
 
-Flags
+Flags (to pass to Docker)
 --------------
 * `-H, --host` default `0.0.0.0`
 * `-p, --port` default `5151`
