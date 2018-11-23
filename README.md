@@ -2,7 +2,7 @@ Socketz
 ============
 ![socket](https://github.com/r3lik/socketz/blob/master/socket.png)
 
-A simple TCP server written in Python. It uses `HAProxy` for Layer 4 load balancing/HA and clustered `etcd` for state replication.
+A simple TCP server written in Python. It uses `HAProxy` for L4 load balancing/HA and clustered `etcd` for state replication.
 
 ![screencap](https://github.com/r3lik/socketz/blob/master/socket.gif)
 
@@ -15,7 +15,7 @@ Requirements
 Usage
 ------------
 * `docker-compose up -d` to provision network, download images and launch containers
-* `docker exec -it client01 /usr/bin/telnet frontend.socketz.gg 4141`... `client04` to mimic outside client connections to FQDN
+* `docker exec -it client01 /usr/bin/telnet frontend.socketz.gg 4141`... `client04` to mimic outside client connections
 * `docker kill server01` to demonstrate that new requests roundrobin to healthy servers only via `HAProxy`
 * `docker kill etcd01` to demonstrate that `DNS` roundrobin will use working connections
 * `docker exec etcd01 /bin/sh -c "export ETCDCTL_API=3 && /usr/local/bin/etcdctl member list"` to list nodes in cluster
@@ -60,16 +60,15 @@ Sample output: client
 ---------------
 
 ```
-telnet 127.0.0.1 6000
-Trying 127.0.0.1...
-Connected to localhost.
+Trying 172.60.0.2...
+Connected to frontend.socketz.gg.
 Escape character is '^]'.
-use 'WHY', 'WHO', 'WHERE', 'QUIT'
 WHO
-client list: {'127.0.0.1:50814', '127.0.0.1:50812'}
-connected clients: 2
+IP:PORT of clients connected to this server: {'172.60.0.3:45274', '172.60.0.4:33078', '172.60.0.2:44592'}
+clients connected to this server: 3
+clients connected to all servers: 5
 WHERE
-69bbfcac-0fc2-48d4-ba23-4eb100dc925d
+08483048-fdb7-4648-9f00-c505e1207df4
 ```
 
 State replication
