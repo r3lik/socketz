@@ -40,6 +40,8 @@ services:
         ipv4_address: ${HAPROXY2_IP}
         aliases:
           - frontend.socketz.gg
+    ports:
+      - "127.0.0.1:9001:9000"
   haproxy03:
     container_name: haproxy03
     hostname: haproxy03
@@ -53,6 +55,8 @@ services:
         ipv4_address: ${HAPROXY3_IP}
         aliases:
           - frontend.socketz.gg
+    ports:
+      - "127.0.0.1:9002:9000"
 
   server01:
     container_name: server01

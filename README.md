@@ -4,7 +4,7 @@ Socketz
 
 A simple TCP server written in Python. It uses `HAProxy` for L4 load balancing/HA and clustered `etcd` for state replication.
 
-![screencap](https://github.com/r3lik/socketz/blob/master/socket.gif)
+![screencap](https://github.com/r3lik/socketz/blob/master/socket_v2.gif)
 
 Requirements
 --------------
@@ -23,7 +23,10 @@ Usage
 
 HAProxy stats
 -------------
-* `http://localhost:9000/stats` admin:hodl
+* `haproxy01` `http://localhost:9000/stats`
+* `haproxy02` `http://localhost:9001/stats`
+* `haproxy03` `http://localhost:9002/stats`
+default credentials: admin:hodl
 
 Commands
 -------------
@@ -71,10 +74,21 @@ WHERE
 08483048-fdb7-4648-9f00-c505e1207df4
 ```
 
-State replication
------------------
-We can implement state replication of connected clients across the cluster with `etcd`. To add fault tolerance, it's recommended to run an odd number of nodes in the cluster e.g. 5. The python `requests` or `etcd3` library can be used to add/remove connected clients using the `etcd` api. The K/V store would become the source of truth for all three of the backend servers, and our server command `WHO` would list all connected clients on all available server backends. This would replace the existing set that is currently unaware of another servers' state. Consistency would be enforced by `Raft`, the consensus algorithm used by `etcd`.
+State replication and fault tolerance
+-------------------------------------
+This is accomplished by running a three member cluster of `etcd` with `HAProxy` load balancing client requests. `etcd` is the source of truth for all three of the backend Python servers. Consistency is enforced by `Raft`, the consensus algorithm used by `etcd`. For `etcd` HA is achieved by pointing to a DNS roundrobin'ed FQDN, so that requests hit the next available host ([RFC 1794](http://www.faqs.org/rfcs/rfc1794.html)). Docker DNS handles this differently as it pulls the A record out. For the servers, HA is achieved by the use of `HAProxy` 2s check intervals and roundrobin proxy. Furthermore, we also use DNS roundrobin for the FQDN that clients connect to.
 
+```
+root@client02:/# dig frontend.socketz.gg +short
+172.60.0.3
+172.60.0.2
+172.60.0.4
+
+root@client02:/# dig etcd-cluster.socketz.gg +short
+172.60.0.22
+172.60.0.21
+172.60.0.23
+```
 
 ```
 ❯ docker exec etcd01 /bin/sh -c "export ETCDCTL_API=3 && /usr/local/bin/etcdctl put clients 5"`
@@ -88,5 +102,4 @@ clients
 clients
 5
 ```
-This shows that a key:value pair put on `etcd01` is made available to `etcd02` and `etcd03` via the `Raft` consensus algorithm.
-In the server code, I would add a function to increment/decrement the `clients` value based on connections/disconnections.
+This shows that a key:value pair put on `etcd01` is made available to `etcd02` and `etcd03` via the `Raft` consensus algorithm. If one dies, it will "re-sync" when it rejoins the cluster.
