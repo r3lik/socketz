@@ -1,10 +1,10 @@
 Socketz
 ============
-![socket](https://github.com/r3lik/socketz/blob/master/socket.png)
+![socket](https://github.com/r3lik/socketz/blob/master/media/socket.png)
 
-A simple TCP server written in Python. It uses `HAProxy` for L4 load balancing/HA and clustered `etcd` for state replication.
+A simple TCP server written in Python. It uses [HAProxy](https://github.com/haproxy/haproxy) for L4 load-balancing/HA and clustered [etcd](https://github.com/etcd-io/etcd) for state replication.
 
-![screencap](https://github.com/r3lik/socketz/blob/master/socket_v2.gif)
+![screencap](https://github.com/r3lik/socketz/blob/master/media/socket_v2.gif)
 
 Requirements
 --------------
@@ -17,7 +17,7 @@ Usage
 * `docker-compose up -d` to provision network, download images and launch containers
 * `docker exec -it client01 /usr/bin/telnet frontend.socketz.gg 4141`... `client04` to mimic outside client connections
 * `docker kill server01` to demonstrate that new requests roundrobin to healthy servers only via `HAProxy`
-* `docker kill etcd01` to demonstrate that `DNS` roundrobin will use working connections
+* `docker kill etcd01` to demonstrate that DNS roundrobin will use working connections
 * `docker exec etcd01 /bin/sh -c "export ETCDCTL_API=3 && /usr/local/bin/etcdctl member list"` to list nodes in cluster
 
 
@@ -26,6 +26,7 @@ HAProxy stats
 * `haproxy01` `http://localhost:9000/stats`
 * `haproxy02` `http://localhost:9001/stats`
 * `haproxy03` `http://localhost:9002/stats`
+
 default credentials: admin:hodl
 
 Commands
@@ -76,7 +77,7 @@ WHERE
 
 State replication and fault tolerance
 -------------------------------------
-This is accomplished by running a three member cluster of `etcd` with `HAProxy` load balancing client requests. `etcd` is the source of truth for all three of the backend Python servers. Consistency is enforced by `Raft`, the consensus algorithm used by `etcd`. For `etcd` HA is achieved by pointing to a DNS roundrobin'ed FQDN, so that requests hit the next available host ([RFC 1794](http://www.faqs.org/rfcs/rfc1794.html)). Docker DNS handles this differently as it pulls the A record out. For the servers, HA is achieved by the use of `HAProxy` 2s check intervals and roundrobin proxy. Furthermore, we also use DNS roundrobin for the FQDN that clients connect to.
+This is accomplished by running a three member cluster of etcd with HAProxy load balancing client requests. etcd is the source of truth for all three of the backend Python servers. Consistency is enforced by Raft, the consensus algorithm used by etcd. For etcd HA is achieved through a combination of [clustering](https://github.com/etcd-io/etcd/blob/master/Documentation/faq.md#what-is-failure-tolerance) (failure tolerance 1 with a 3 node cluster) and pointing to a DNS roundrobin'ed FQDN, so that requests hit the next available host ([RFC 1794](http://www.faqs.org/rfcs/rfc1794.html)). It's worth noting that Docker DNS handles this differently as it pulls the A record out. For the TCP servers, HA is achieved by the use of HAProxy roundrobin proxy with 2s check intervals, as well as DNS roundrobin.
 
 ```
 root@client02:/# dig frontend.socketz.gg +short
@@ -102,4 +103,4 @@ clients
 clients
 5
 ```
-This shows that a key:value pair put on `etcd01` is made available to `etcd02` and `etcd03` via the `Raft` consensus algorithm. If one dies, it will "re-sync" when it rejoins the cluster.
+This shows that a key:value pair put on `etcd01` is made available to `etcd02` and `etcd03` via the Raft consensus algorithm. If one dies, it will "re-sync" when it rejoins the cluster.
